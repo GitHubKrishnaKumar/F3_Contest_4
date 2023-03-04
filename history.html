@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History Book</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="menu">
+        <div><a href="#"><span class="logo">Book Store App</span></a></div>
+        <div class="menu-item">
+            <a href="index.html"><span> Home</span></a>
+            <a href="history.html"><span> History</span></a>
+        </div>
+    </nav>
+        <main>
+            <div class="searchBar">
+                <p class="heading">Your Previous Searches</p>
+                <button id="clear">Clear Search</button>
+            </div>
+            <div class="data-item">
+    
+            </div>
+        </main>
+    <script>
+        let dataItem = document.querySelector(".data-item");
+        let clearBtn = document.querySelector('#clear');
+
+        function showData(){
+            let historyData = JSON.parse(localStorage.getItem("Book Data")) || [];
+            dataItem.innerHTML = "";
+            historyData.map((data,index)=>{
+                let item = document.createElement("div");
+                item.setAttribute("class","item");
+                let search = document.createElement("p");
+                search.innerHTML = `${index+1}.  ${data.searchData}`;
+                let time = document.createElement("p");
+                time.innerHTML = `Searched On : ${data.date} at ${data.time}`;
+                item.append(search,time);
+                dataItem.append(item);
+                item.addEventListener("click",()=>{
+                    let presentData = {
+                        id : index+1,
+                        search : data.searchData,
+                        date : data.date,
+                        time : data.time
+                    };
+                    // console.log(presentData);
+                    sessionStorage.setItem("CurrBookData",JSON.stringify(presentData));//data add in Session Storage
+                    window.location.href="searched.html";
+                })
+            })
+
+        }
+        showData();
+
+        //clear data from local storage
+        clearBtn.addEventListener('click',(e)=>{
+            e.preventDefault();
+            window.localStorage.removeItem('Book Data');
+        })
+
+    </script>
+
+</body>
+</html>
